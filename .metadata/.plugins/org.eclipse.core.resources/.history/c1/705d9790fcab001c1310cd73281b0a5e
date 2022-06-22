@@ -1,0 +1,53 @@
+/*==========================================
+	MemberProcess.java
+	- 콘솔 기반 서브 메뉴 입출력 전용 클래스
+============================================*/
+
+
+package com.test;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class MemberProcess
+{
+	// 주요 속성 구성
+	private MemberDAO dao;
+	
+	// dao 인스턴스 생성을 할 수 있도록 생성자 정의
+	public MemberProcess()
+	{
+		dao = new MemberDAO();
+	}
+	
+	// 직원 정보 입력 메소드 정의 (출력 위주)
+	public void memberInsert()
+	{
+		Scanner sc = new Scanner(System.in);
+		
+		try
+		{
+			//데이터베이스 연결
+			dao.connection();
+			
+			// 지역 리스트 구성
+			ArrayList<String> citys = dao.searchCity();
+			StringBuilder cityStr = new StringBuilder();
+			for (String city : citys)
+			{
+				cityStr.append(city + "/");
+			}
+			
+			// 부서 리스트 구성
+			
+			// 직위 리스트 구성
+			
+			// 사용자에게 보여지는 화면 처리
+		} catch (Exception e)
+		{
+			System.out.print(e.toString());
+		}
+		
+	}
+	
+}

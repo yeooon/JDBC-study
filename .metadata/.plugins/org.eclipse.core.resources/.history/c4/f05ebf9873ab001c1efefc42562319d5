@@ -1,0 +1,219 @@
+package com.test;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.util.DBConn;
+
+public class MemberDAO
+{
+	// 주요 속성 구성
+	private Connection conn;
+	
+	// 데이터 연결 메소드
+	public Connection connection() throws ClassNotFoundException, SQLException
+	{
+		conn = DBConn.getConnection();
+		return conn;
+	}
+	
+	// 데이터 입력 메소드
+	public int add(MemberDTO dto) throws SQLException
+	{
+		int result = 0;
+		Statement stmt = conn.createStatement();
+		String sql = String.format("INSERT INTO TBL_EMP(EMP_ID, EMP_NAME, SSN, IBSADATE, CITY_ID, TEL"
+				+ ", BUSEO_ID, JIKWI_ID, BASICPAY, SUDANG)"
+				+ "VALUES (EMPSEQ.NEXTVAL, '%s', '%s', '%s'"
+				+ ", (SELECT CITY_ID FROM TBL_CITY WHERE CITY_LOC='%s')"
+				+ ",'%s',(SELECT BUSEO_ID FROM TBL_BUSEO WHERE BUSEO_NAME = '%s')"
+				+ ",(SELECT JIKWI_ID FROM TBL_JIKWI WHERE JIKWI_NAME = '%s'),%d,%d)"
+				,dto.getEMP_NAME(),dto.getSSN(),dto.getIBSADATE()
+				,dto.getCITY_LOC(),dto.getTEL(),dto.getBUSEO_NAME(),dto.getJIKWI_NAME()
+				,dto.getBASICPAY(),dto.getSUDANG());
+		result = stmt.executeUpdate(sql);
+		stmt.close();
+		return result;
+	}
+	
+	
+	// 데이터 출력 메소드
+	public ArrayList<MemberDTO> arrayList(int num) throws SQLException
+	{
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT EMP_ID, EMP_NAME, SSN, IBSADATE"
+				+ ", CITY_ID, TEL, BUSEO_ID, JIKWI_ID"
+				+ ", BASICPAY, SUDANG FROM TBL_EMP";
+
+		switch (num)
+		{
+		case 1:
+			sql = sql + "ORDER BY EMP_ID";
+			break;
+
+		case 2:
+			sql = sql + "ORDER BY EMP_NAME";
+			break;
+
+		case 3:
+			sql = sql + "ORDER BY BUSEO_ID";
+			break;
+			
+		case 4:
+			sql = sql + "ORDER BY JIKWI_ID";
+			break;
+			
+		case 5:
+			sql = sql + "ORDER BY BASICPAY DESC";
+			break;
+			
+		default :
+			System.out.println("입력 내용이 잘못되었습니다.");
+			break;
+		}
+		ResultSet rs = stmt.executeQuery(sql);
+		while (rs.next())
+		{
+			MemberDTO dto = new MemberDTO();
+			dto.setEMP_ID(rs.getInt("EMP_ID"));
+			dto.setEMP_NAME(rs.getString("EMP_NAME"));
+			dto.setSSN(rs.getString("SSN"));
+			dto.setIBSADATE(rs.getString("setIBSADATE"));
+			dto.setCITY_ID(rs.getInt("CITY_ID"));
+			dto.setTEL(rs.getString("TEL"));
+			dto.setBUSEO_ID(rs.getInt("BUSEO_ID"));
+			dto.setJIKWI_ID(rs.getInt("JIKWI_ID"));
+			dto.setBASICPAY(rs.getInt("BASICPAY"));
+			dto.setSUDANG(rs.getInt("SUDANG"));
+			
+			result.add(dto);
+			
+		}
+		rs.close();
+		stmt.close();
+		
+		return result;
+					
+	}
+	
+	// 직원 검색(사번검색, 이름, 부서, 직위)
+	public ArrayList<MemberDTO> lists(int num, String name) throws SQLException
+	{
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT EMP_ID, EMP_NAME, SSN, IBSADATE"
+				+ ", CITY_ID, TEL, BUSEO_ID, JIKWI_ID"
+				+ ", BASICPAY, SUDANG FROM TBL_EMP";	
+		switch (num)
+		{
+		case 1:
+			sql = sql + String.format("WHERE EMP_ID = %s", name);
+			break;
+
+		case 2:
+			sql = sql + String.format("WHERE EMP_NAME = %s", name);
+			break;	
+			
+		case 3:
+			sql = sql + String.format("WHERE BUSEO_ID = %s", name);
+			break;	
+			
+		case 4:
+			sql = sql + String.format("WHERE JIKWI_ID = %s", name);
+			break;				
+					
+		default:
+			System.out.println("유효하지 않은 숫자입니다.");
+			break;
+		}
+		ResultSet rs = stmt.executeQuery(sql);
+		while (rs.next())
+		{
+			MemberDTO dto = new MemberDTO();
+			dto.setEMP_ID(rs.getInt("EMP_ID"));
+			dto.setEMP_NAME(rs.getString("EMP_NAME"));
+			dto.setSSN(rs.getString("SSN"));
+			dto.setIBSADATE(rs.getString("setIBSADATE"));
+			dto.setCITY_ID(rs.getInt("CITY_ID"));
+			dto.setTEL(rs.getString("TEL"));
+			dto.setBUSEO_ID(rs.getInt("BUSEO_ID"));
+			dto.setJIKWI_ID(rs.getInt("JIKWI_ID"));
+			dto.setBASICPAY(rs.getInt("BASICPAY"));
+			dto.setSUDANG(rs.getInt("SUDANG"));
+			
+			result.add(dto);
+		}
+		rs.close();
+		stmt.close();
+		
+		return result;
+	}
+	
+	
+	// 인원 수 확인 메소드
+	public int count() throws SQLException
+	{
+		int result = 0;
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT COUNT(*) AS COUNT FROM TBL_EMP";
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		while (rs.next())
+		{
+			result = rs.getInt("COUNT");
+		}
+		rs.close();
+		stmt.close();
+		
+		return result;
+		
+	}
+	
+	// 데이터 수정 메소드
+	public int modify(MemberDTO dto) throws SQLException
+	{
+		int result = 0;
+		Statement stmt = conn.createStatement();
+		String sql = String.format("UPDATE TBL_MEMBER "
+				+ "SET EMP_NAME = '%s', SSN = '%s', IBSADATE = '%s'"
+				+ ", CITY_ID = %d, TEL = '%s', BUSEO_ID = %d, JIKWI_ID = %d"
+				+ ", BASICPAY = %d, SUDANG = %d "
+				+ "WHERE EMP_ID = %d"
+				, dto.getEMP_ID(), dto.getEMP_NAME(), dto.getSSN(), dto.getIBSADATE()
+				, dto.getCITY_ID(), dto.getTEL(), dto.getBUSEO_ID(), dto.getJIKWI_ID()
+				, dto.getBASICPAY(), dto.getSUDANG());
+		
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		rs.close();
+		stmt.close();
+		return result;	
+	}
+	
+	// 데이터 삭제 메소드
+	public int remove(int sid) throws SQLException
+	{
+		int result = 0;
+		Statement stmt = conn.createStatement();
+		String sql = String.format("DELETE FROM TBL_MEMBER WHERE EMP_ID = %d;", sid);
+		
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		rs.close();
+		stmt.close();
+		return result;	
+	}
+	
+	// 데이터베이스 연결 종료 메소드
+	public void close() throws SQLException
+	{
+		DBConn.close();
+	}
+	
+	
+	
+}

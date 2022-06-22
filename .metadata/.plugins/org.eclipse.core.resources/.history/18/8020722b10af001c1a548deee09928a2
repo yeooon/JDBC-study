@@ -1,0 +1,46 @@
+/*===================================================
+	Test002.java
+	- CallableStatement 를 활용한 SQL 구문 전송 실습
+====================================================*/
+
+package com.test;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+
+import com.util.DBConn;
+
+public class Test002
+{
+	public static void main(String[] args)
+	{
+		try
+		{
+			Connection conn = DBConn.getConnection();
+			
+			if (conn != null)
+			{
+				System.out.println("데이터베이스 연결 성공~!!!");
+				
+				try
+				{
+					// 쿼리문 준비 check~!!!
+					String sql = "{call PRC_MEMBERSELECT(?)}";
+					
+					// CallableStatement 작업 객체 생성 check~!!!
+					CallableStatement cstmt = conn.prepareCall(sql);
+					
+				} catch (Exception e)
+				{
+					System.out.println(e.toString());
+				}
+			}
+			
+			
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+}

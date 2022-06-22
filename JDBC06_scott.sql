@@ -1,0 +1,56 @@
+SELECT USER
+FROM DUAL;
+--==>>SCOTT
+
+SELECT *
+FROM TBL_MEMBER;
+--==>>
+/*
+1	이호석	010-1111-1111
+2	이연주	010-4423-0463
+3	이창록	010-4148-0463
+4	김화용	010-2511-0463
+5	오이삭	010-4444-4444
+*/
+
+--○ 데이터 입력 쿼리문 구성
+INSERT INTO TBL_MEMBER(SID, NAME, TEL)
+VALUES(MEMBERSEQ.NEXTVAL, '김상기', '010-4444-4444');
+--> 한 줄 구성
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '김상기', '010-4444-4444')
+;
+-->> 1 행 이(가) 삽입되었습니다.
+
+SELECT *
+FROM TBL_MEMBER;
+
+--○ 커밋
+COMMIT;
+
+
+--○ 데이터 전체 조회 쿼리문 구성
+SELECT SID, NAME, TEL
+FROM TBL_MEMBER
+ORDER BY SID;
+--> 한 줄 구성
+SELECT SID, NAME, TEL FROM TBL_MEMBER ORDER BY SID
+;
+
+/*
+1	이호석	010-1111-1111
+2	이연주	010-4423-0463
+3	이창록	010-4148-0463
+4	김화용	010-2511-0463
+5	오이삭	010-4444-4444
+6	김상기	010-4444-4444
+7	김길동	010-5555-5555
+8	박현수	010-6666-6666
+*/
+
+
+commit;
+-- 연주야~ 이거 안해서 생기는 오류 같아 보인다~~~
+
+
+
+

@@ -1,0 +1,36 @@
+/*===================================
+ 	MemberDAO.java
+ 	- 데이터베이스 액션 처리 전용 클래스
+=====================================*/
+
+package com.test;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.util.DBConn;
+
+public class MemberDAO
+{
+	//주요 속성 구성
+	private Connection conn;
+	
+	//데이터베이스 연결
+	public Connection connection() throws ClassNotFoundException, SQLException
+	{
+		conn = DBConn.getConnection();
+		return conn;
+	}
+	
+	//데이터베이스 연결 종료
+	public void close() throws SQLException
+	{
+		DBConn.close();
+	}
+	
+	//직원 데이터 입력
+	public add(MemberDTO dto)
+	{
+		
+	}
+}

@@ -1,0 +1,75 @@
+package com.test;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.util.DBConn;
+
+public class MemberDAO
+{
+	// 주요 속성 구성
+	private Connection conn;
+	
+	// 데이터 연결 메소드
+	public Connection connection() throws ClassNotFoundException, SQLException
+	{
+		conn = DBConn.getConnection();
+		return conn;
+	}
+	
+	// 데이터 입력 메소드
+	public int add(MemberDTO dto) throws SQLException
+	{
+		int result = 0;
+		Statement stmt = conn.createStatement();
+		String sql = String.format("INSERT INTO TBL_EMP (EMP_ID, EMP_NAME, SSN, IBSADATE"
+				+ ", CITY_ID, TEL, BUSEO_ID, JIKWI_ID, BASICPAY, SUDANG)"
+				+ " VALUES (EMPSEQ.NEXTVAL, '%s', '%s'"
+				+ ", '%s', %d, '%s', %d, %d, %d, %d"
+				,dto.getEMP_ID(),dto.getEMP_NAME(),dto.getSSN(),dto.getIBSADATE()
+				,dto.getCITY_ID(),dto.getTEL(),dto.getBUSEO_ID(),dto.getJIKWI_ID()
+				,dto.getBASICPAY(),dto.getSUDANG());
+		result = stmt.executeUpdate(sql);
+		stmt.close();
+		return result;
+	}
+	
+	
+	// 데이터 출력 메소드
+	public ArrayList<MemberDTO> arrayList() throws SQLException
+	{
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT EMP_ID, EMP_NAME, SSN, IBSADATE"
+				+ ", CITY_ID, TEL, BUSEO_ID, JIKWI_ID"
+				+ ", BASICPAY, SUDANG FROM TBL_EMP";
+		
+		switch (num)
+		{
+		case 1:
+			sql = sql + "ORDER BY EMP_ID"
+			break;
+
+		default:
+			break;
+		}
+		stmt.close();
+		return result;
+		
+				
+	}
+	
+	// 이름 검색 메소드
+	
+	// 번호 검색 메소드
+	
+	// 인원 수 확인 메소드
+	
+	// 데이터 수정 메소드
+	
+	// 데이터 삭제 메소드
+	
+	// 데이터베이스 연결 종료 메소드
+}

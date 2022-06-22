@@ -1,0 +1,19 @@
+package com.test;
+
+public class Process
+{
+	private MemberDAO dao;
+	
+	//생성자
+	
+	//멤버 입력
+	
+	//멤버 출력
+	
+	//멤버 삭제
+	
+	//멤버
+	
+	
+	
+}

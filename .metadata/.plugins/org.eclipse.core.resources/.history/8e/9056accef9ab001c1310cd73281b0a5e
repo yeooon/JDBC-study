@@ -1,0 +1,26 @@
+/*==========================================
+	MemberProcess.java
+	- 콘솔 기반 서브 메뉴 입출력 전용 클래스
+============================================*/
+
+
+package com.test;
+
+public class MemberPocess
+{
+	// 주요 속성 구성
+	private MemberDAO dao;
+	
+	// dao 인스턴스 생성을 할 수 있도록 생성자 정의
+	public MemberPocess()
+	{
+		dao = new MemberDAO();
+	}
+	
+	// 직원 정보 입력 메소드 정의 (출력 위주)
+	public void memberInsert()
+	{
+		
+	}
+	
+}

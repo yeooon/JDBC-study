@@ -1,0 +1,146 @@
+package com.test;
+
+import java.util.Scanner;
+
+public class Process
+{
+	private MemberDAO dao;
+	
+	//생성자
+	public Process()
+	{
+		dao = new MemberDAO();
+	}
+	
+	
+	//멤버 입력
+	public void MemberInsert()
+	{
+		try
+		{
+			//데이터베이스 연결
+			dao.connection(); 
+			
+			//레코드 수 확인
+			int count  = dao.count();
+			
+			Scanner sc = new Scanner(System.in);
+			
+			do
+			{
+				 System.out.println("직원 정보 입력 ------------------------------------");
+				 System.out.print(" 이름 : ");
+				 String name = sc.next();
+				 
+				 System.out.print("주민등록번호(yymmdd-nnnnnnn) : "); 
+				 String ssn = sc.next();
+				
+				 System.out.print("입사일 (YYYY-MM-DD) : "); 
+				 String ibsadate = sc.next();
+				 
+				 System.out.printf("지역 : "); 
+				 String city = sc.next();
+				
+				 System.out.print("전화번호 : "); 
+				 String tel = sc.next();
+				
+				 System.out.print("부서 : "); 
+				 String buseo = sc.next();
+				
+				 System.out.print("직위 : "); 
+				 String jikwi = sc.next();
+				 
+				 System.out.print("기본급(최소 840000 이상) : "); 
+				 int basicpay = sc.nextInt();
+				
+				 System.out.print("수당 : "); 
+				 int sudang = sc.nextInt();
+			 
+				if (name.equals("."))
+					break;
+				
+				// 입력받은 항목들을 토대로 ScoreDTO 객체 구성
+				MemberDTO dto = new MemberDTO();
+				dto.setEMP_NAME(name);
+				dto.setSSN(ssn);
+				//입사일 지역 전화번호 부서 직위 기본급 수당 .
+				dto.setIBSADATE(ibsadate);
+				dto.setCITY_LOC(city);
+				dto.setTEL(tel);
+				dto.setBUSEO_NAME(buseo);
+				dto.setJIKWI_NAME(jikwi);
+				dto.setBASICPAY(basicpay);
+				dto.setSUDANG(sudang);
+			
+				// dao의 add 메소드 호출
+				int result = dao.add(dto);
+				
+				if (result > 0)
+				{
+					System.out.println("성적 입력이 완료되었습니다.");
+				}
+								
+			} while (true);
+			
+			//데이터베이스 연결 종료
+			dao.close();
+			
+		} catch (Exception e)
+		{
+			System.out.print(e.toString());
+		}
+	}
+	
+	//멤버 출력
+	public void MemberSelectAll()
+	{
+		Scanner sc = new Scanner(System.in);
+		dao.connection();
+		
+		System.out.println("1. 사번 정렬");
+		System.out.println("2. 이름 정렬");
+		System.out.println("3. 부서 정렬");
+		System.out.println("4. 직위 정렬");
+		System.out.println("5. 급여 내림차순 정렬");
+		System.out.print(">> 선택(1~5 -1 종료) : ");
+		
+		int num = sc.nextInt();
+		
+		if (num == -1)
+			return;
+		
+		
+		try
+		{
+			dao.connection();
+			
+			int count = dao.count();
+			
+			System.out.println();
+			System.out.printf("전체 인원 %d명\n", count);
+			System.out.println("사번	이름	주민번호	입사일	지역	전화번호	부서	직위	기본급	수당");
+			
+			
+			for (MemberDTO dto : dao.arrayList(num))
+			{
+				System.out.printf("%3d %4s %4s %5s %5s %5s %5s %5s %5d %5d"
+						, dto.getEMP_ID(),dto.getEMP_NAME(),dto.getSSN(),dto.getIBSADATE()
+						, dto.getCITY_ID(),dto.getTEL(),dto.getJIKWI_ID(),dto.getBASICPAY(),dto.getSUDANG());
+			}
+		} catch (Exception e)
+		{
+			System.out.print(e.toString());
+		}
+	}
+	
+	//멤버 검색 출력
+	
+	
+	// 멤버 수정
+	
+	//멤버 삭제
+	
+	
+	
+	
+}

@@ -1,0 +1,65 @@
+package com.util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class DBConn
+{
+	private static Connection dbConn;
+	
+	public static Connection getcConnection()
+	{
+		try
+		{
+			if (dbConn == null)
+			{
+				String url = "jdbc:oracle:thin:@localhost:1521:xe";	
+				String user = "scott";
+				String pw = "tiger";
+				
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				
+				dbConn = DriverManager.getConnection(url,user,pw);
+			}
+		} 
+		catch (Exception e)
+		{
+			System.out.print(e.toString());
+		}
+		return dbConn;
+	}
+	
+	public static Connection getcConnection(String url,String user,String pw)
+	{
+		try
+		{
+			if (dbConn == null)
+			{				
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				
+				dbConn = DriverManager.getConnection(url,user,pw);
+			}
+		} 
+		catch (Exception e)
+		{
+			System.out.print(e.toString());
+		}
+		return dbConn;
+	}
+	
+	public static void close()
+	{
+		try
+		{
+			if (dbConn != null)
+			{				
+				dbConn.isClosed();
+			}
+		} 
+		catch (Exception e)
+		{
+			System.out.print(e.toString());
+		}
+		dbConn = null;
+	}
+}
